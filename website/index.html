@@ -1,0 +1,157 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>ModelFit — which LLM should I run on my computer?</title>
+  <meta name="description" content="ModelFit answers 'which open-source LLM should I run on my computer?' for any hardware, in plain English. CLI, GUI, REST API.">
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+
+<nav class="topbar">
+  <div class="container">
+    <a href="/" class="brand">model<span>fit</span></a>
+    <ul>
+      <li><a href="#install">Install</a></li>
+      <li><a href="#commands">Commands</a></li>
+      <li><a href="#how">How it works</a></li>
+      <li><a href="demo/">Try it</a></li>
+      <li><a href="https://github.com/vamshinr/ModelFit">GitHub</a></li>
+    </ul>
+  </div>
+</nav>
+
+<section class="hero">
+  <div class="container">
+    <h1>Which LLM should I run<br><span class="accent">on my computer?</span></h1>
+    <p class="tagline">
+      ModelFit checks 254 open-source LLMs against your hardware, predicts throughput
+      across major inference engines, and explains every term in plain English.
+    </p>
+    <div class="cta-row">
+      <a class="btn primary" href="demo/">Try the live demo →</a>
+      <a class="btn" href="#install">Install</a>
+      <a class="btn" href="https://github.com/vamshinr/ModelFit">View source</a>
+    </div>
+  </div>
+</section>
+
+<section id="what">
+  <div class="container">
+    <h2>What you get</h2>
+    <div class="grid">
+      <div class="card">
+        <span class="icon">⭐</span>
+        <h3>Quality</h3>
+        <p>★★★★★ Excellent — no perplexity scores or jargon. Curated scores for every model.</p>
+      </div>
+      <div class="card">
+        <span class="icon">⚡</span>
+        <h3>Speed</h3>
+        <p>⚡ Instant / 🚀 Snappy / ✅ Usable / 🐢 Slow — predicted tok/s for your hardware.</p>
+      </div>
+      <div class="card">
+        <span class="icon">📚</span>
+        <h3>Context</h3>
+        <p>📚 Whole book / 📖 Long doc / ✉️ Short prompt — capped to what your RAM allows.</p>
+      </div>
+      <div class="card">
+        <span class="icon">💾</span>
+        <h3>Memory + Download</h3>
+        <p>"2.3 GB of 4.8 GB available · ~1 GB on disk" — no GB-per-parameter math.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section id="install">
+  <div class="container">
+    <h2>Install</h2>
+
+    <h3>Python (full CLI + REST API + HuggingFace sync)</h3>
+<pre><code>git clone https://github.com/vamshinr/ModelFit.git
+cd ModelFit
+python3 -m venv .venv && source .venv/bin/activate   # required on Debian/Ubuntu (PEP 668)
+pip install -e .
+modelfit wizard</code></pre>
+    <p>Requires Python 3.9+. Only deps: <code>rich</code> + <code>psutil</code>.</p>
+
+    <h3>macOS native binary (arm64, ~200 KB)</h3>
+<pre><code>curl -LO https://github.com/vamshinr/ModelFit/releases/download/v0.1.0/modelfit-0.1.0-macos-arm64.tar.gz
+tar xzf modelfit-0.1.0-macos-arm64.tar.gz
+cd modelfit-0.1.0-macos-arm64
+xattr -d com.apple.quarantine modelfit-cli modelfit-gui    # clear Gatekeeper
+./modelfit-cli rank --top 5</code></pre>
+    <p>Apple Silicon only for now. Linux + Intel macOS + Windows builds coming.</p>
+  </div>
+</section>
+
+<section id="commands">
+  <div class="container">
+    <h2>The five commands you'll actually use</h2>
+
+    <h3><code>modelfit wizard</code> — for total beginners</h3>
+    <p>Two questions, one recommended model, one install command. ~2 minutes from zero to chatting locally.</p>
+
+    <h3><code>modelfit</code> — show everything that fits</h3>
+<pre><code>modelfit                  # default: balanced
+modelfit -u chat          # leaning toward speed
+modelfit -u code          # for writing code
+modelfit -u reasoning     # for hard problems</code></pre>
+
+    <h3><code>modelfit recommend</code> — give me ONE pick</h3>
+    <p>Picks the best balanced choice, explains <em>why</em> in 3 sentences, gives Ollama / LM Studio / llama.cpp install commands.</p>
+
+    <h3><code>modelfit get &lt;model&gt;</code></h3>
+    <p>Copy-paste install commands for Ollama, HuggingFace + llama.cpp, and LM Studio, plus download size.</p>
+
+    <h3><code>modelfit explain &lt;term&gt;</code></h3>
+    <p>109-entry glossary across 10 categories: basics, hardware, quantization, training, architecture, inference, engines, applications, safety, theory.</p>
+  </div>
+</section>
+
+<section id="example">
+  <div class="container">
+    <h2>What it looks like</h2>
+    <pre class="example-output"><span class="label">$</span> modelfit wizard
+<span class="label">…</span>
+
+🎯 Your pick: <span class="accent">Gemma 3 1B</span>
+  <span class="good">✅ Good pick</span>
+  Quality:  ★★★★★  Excellent quality
+  Speed:    ⚡ Instant
+  Context:  📖 Long document (98 pages at a time)
+  Memory:   2.3 GB of 4.8 GB available
+  Download: ~1 GB on disk
+
+🚀 Easiest install (Ollama):
+   <span class="accent">ollama run gemma3:1b</span></pre>
+  </div>
+</section>
+
+<section id="how">
+  <div class="container">
+    <h2>How "fits" is decided</h2>
+    <p>A model fits when, after picking a quality level (compression) and a context length, total memory needed is less than what your computer has. ModelFit:</p>
+    <ul>
+      <li>Tries the highest quality first, walks down (Q8_0 → Q6_K → Q5_K_M → Q4_K_M → Q3_K_M → Q2_K) only if needed.</li>
+      <li>Tries the full context first, walks down (100% → 50% → 25%) only if needed.</li>
+      <li>Picks the highest-quality combo that fits.</li>
+      <li>Leaves 8% memory headroom so your machine doesn't choke on the first long prompt.</li>
+    </ul>
+    <p>The catalog is 206 hand-curated entries plus anything synced from HuggingFace (<code>modelfit catalog sync</code>). Curated quality scores always win on duplicates.</p>
+  </div>
+</section>
+
+<footer>
+  <div class="container">
+    <a href="https://github.com/vamshinr/ModelFit">GitHub</a> ·
+    <a href="demo/">Live demo</a> ·
+    <a href="#install">Install</a>
+    <div style="margin-top:12px;">ModelFit · MIT licensed</div>
+  </div>
+</footer>
+
+</body>
+</html>

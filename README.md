@@ -56,6 +56,28 @@ pip install -e '.[tui]'    # interactive textual UI
 
 Requires Python 3.9+. Only dependencies are `rich` and `psutil`.
 
+### Debian / Ubuntu (Python 3.11+): use a venv
+
+On modern Debian/Ubuntu, `pip install -e .` against the system Python errors out with **`error: externally-managed-environment`** (PEP 668). The fix is to install into a project-local virtual environment:
+
+```bash
+# One-time setup
+sudo apt install -y python3-venv python3-full   # if you don't already have it
+python3 -m venv .venv
+source .venv/bin/activate
+pip install -e .
+
+# Every new shell
+source /path/to/ModelFit/.venv/bin/activate
+modelfit wizard
+```
+
+Prefer not to activate? Call the binary directly: `./.venv/bin/modelfit ...`.
+
+Alternatives, in order of preference:
+- **pipx** (`pipx install -e .`) — good for installing the CLI globally in an isolated env, but its editable-install support is limited; skip if you plan to hack on the code.
+- **`pip install -e . --break-system-packages`** — works but writes into the OS Python's `site-packages` and can be clobbered by `apt upgrade`. Acceptable in a throwaway VM or container; avoid on anything you care about.
+
 ---
 
 ## The five commands you'll actually use
@@ -350,6 +372,25 @@ POST /reverse          (compute required hardware)
 ```
 
 CORS-enabled, no extra deps (uses stdlib `http.server`).
+
+---
+
+## Website (local)
+
+The repo ships a small static site under `website/` — a landing page at `/` and an interactive demo at `/demo/` that calls the REST API live. To run it locally:
+
+```bash
+# Terminal 1 — the API
+source .venv/bin/activate
+modelfit serve --port 8765
+
+# Terminal 2 — the static site
+cd website && python3 -m http.server 8080
+```
+
+Then open <http://127.0.0.1:8080/>. The demo page reads `/hardware` and `POSTs /rank` against the API on `:8765`; CORS is open by default so any origin works.
+
+No build step — plain HTML/CSS/JS, single shared stylesheet. To deploy as a static site (GitHub Pages, Netlify, etc.), point your host at the `website/` directory; the demo will still call whatever API endpoint the user types into the "API endpoint" field.
 
 ---
 
