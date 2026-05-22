@@ -1,0 +1,40 @@
+[build-system]
+requires = ["setuptools>=68", "wheel"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "modelfit"
+version = "0.1.0"
+description = "Auto-detect hardware and rank LLMs by what actually runs on your system."
+readme = "README.md"
+requires-python = ">=3.9"
+license = { text = "MIT" }
+authors = [{ name = "ModelFit" }]
+keywords = ["llm", "inference", "gguf", "quantization", "hardware", "ranking"]
+classifiers = [
+    "Development Status :: 4 - Beta",
+    "Environment :: Console",
+    "Intended Audience :: Developers",
+    "License :: OSI Approved :: MIT License",
+    "Programming Language :: Python :: 3",
+    "Topic :: Scientific/Engineering :: Artificial Intelligence",
+]
+
+dependencies = [
+    "rich>=13.0",
+    "psutil>=5.9",
+]
+
+[project.optional-dependencies]
+tui = ["textual>=0.50"]
+api = []  # Uses stdlib http.server; no extra deps.
+all = ["textual>=0.50"]
+
+[project.scripts]
+modelfit = "modelfit.cli:main"
+
+[tool.setuptools]
+packages = ["modelfit", "modelfit.data"]
+
+[tool.setuptools.package-data]
+"modelfit.data" = ["*.json"]

@@ -1,0 +1,190 @@
+# ============================================================================
+# Python
+# ============================================================================
+__pycache__/
+*.py[cod]
+*$py.class
+*.so
+
+# Distribution / packaging
+.Python
+build/
+develop-eggs/
+dist/
+downloads/
+eggs/
+.eggs/
+lib/
+lib64/
+parts/
+sdist/
+var/
+wheels/
+share/python-wheels/
+*.egg-info/
+.installed.cfg
+*.egg
+MANIFEST
+
+# Virtual environments
+.venv/
+venv/
+env/
+ENV/
+env.bak/
+venv.bak/
+.python-version
+
+# Test / coverage
+.pytest_cache/
+.tox/
+.nox/
+.coverage
+.coverage.*
+htmlcov/
+.cache
+nosetests.xml
+coverage.xml
+*.cover
+*.py,cover
+
+# Type checkers
+.mypy_cache/
+.pyre/
+.pytype/
+.ruff_cache/
+
+# Jupyter
+.ipynb_checkpoints
+*.ipynb_checkpoints
+
+# ============================================================================
+# C++ / CMake
+# ============================================================================
+cpp/build/
+cpp/build-*/
+build/
+build-*/
+out/
+bin/
+obj/
+
+# CMake artefacts
+CMakeCache.txt
+CMakeFiles/
+CMakeScripts/
+cmake_install.cmake
+install_manifest.txt
+compile_commands.json
+Testing/
+_deps/
+
+# Compiled object / binary files
+*.o
+*.obj
+*.a
+*.lib
+*.so
+*.so.*
+*.dylib
+*.dll
+*.exe
+*.app/
+*.out
+*.elf
+*.pdb
+*.ilk
+*.exp
+
+# CTest
+CTestTestfile.cmake
+
+# ============================================================================
+# Project-specific runtime / cache
+# ============================================================================
+# ModelFit local cache (HuggingFace sync, settings) lives in $HOME/.modelfit/,
+# outside the repo. Anything in-repo with that name is accidental.
+.modelfit/
+catalog_hf.json
+*.swp.modelfit
+
+# Local notes / TODOs that shouldn't be committed
+TODO.local
+NOTES.local
+*.local.md
+
+# ============================================================================
+# OS detritus
+# ============================================================================
+# macOS
+.DS_Store
+.DS_Store?
+.AppleDouble
+.LSOverride
+._*
+Icon?
+
+# Windows
+Thumbs.db
+Thumbs.db:encryptable
+ehthumbs.db
+ehthumbs_vista.db
+Desktop.ini
+$RECYCLE.BIN/
+*.stackdump
+
+# Linux
+.directory
+.Trash-*
+.nfs*
+
+# ============================================================================
+# Editors / IDEs
+# ============================================================================
+# VS Code
+.vscode/*
+!.vscode/settings.json
+!.vscode/tasks.json
+!.vscode/launch.json
+!.vscode/extensions.json
+*.code-workspace
+
+# JetBrains (PyCharm, CLion, IntelliJ)
+.idea/
+*.iml
+*.ipr
+*.iws
+cmake-build-*/
+
+# Vim / Neovim
+*.swp
+*.swo
+*.swn
+*~
+.netrwhist
+Session.vim
+
+# Emacs
+*~
+\#*\#
+.\#*
+
+# Sublime
+*.sublime-project
+*.sublime-workspace
+
+# Visual Studio
+.vs/
+*.suo
+*.user
+*.userosscache
+*.sln.docstates
+
+# ============================================================================
+# Logs / temp
+# ============================================================================
+*.log
+logs/
+*.tmp
+*.temp
+*.bak
