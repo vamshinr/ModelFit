@@ -15,6 +15,21 @@ Same model catalog, same scoring math, two front-ends.
 
 ---
 
+## Overview
+
+**The problem.** Teams deploying open-weight LLMs on their own hardware face a recurring question: which models will actually run, and which inference engine will run them fastest? Answering that today means cross-referencing param counts, quantization tradeoffs, KV-cache math, and engine-specific kernels — every time hardware or a model release changes.
+
+**The approach.** ModelFit detects the host system (CPU, RAM, GPU/VRAM, memory bandwidth) via platform-native APIs — `sysctlbyname` + IOKit on Apple Silicon, `/proc` and `nvidia-smi` on Linux, DXGI on Windows — then ranks a catalog of 206 curated open-weight models (plus a live HuggingFace sync, ~254 models today) across **quality, speed, memory fit, and context**. For each model it walks the quantization hierarchy (Q8_0 → Q6_K → Q5_K_M → Q4_K_M → Q3_K_M → Q2_K), picks the highest-quality combination that fits within an 8% memory headroom, then computes a composite score weighted by use-case (`chat` prioritizes speed, `reasoning` prioritizes quality, `long-context` prioritizes window size). Throughput is estimated from memory-bandwidth-bound decoding for nine inference engines (vLLM, llama.cpp, TGI, TensorRT-LLM, SGLang, ExLlamaV2, Ollama, MLX, HF Transformers). MoE architectures (Mixtral, DeepSeek V3, Qwen3-MoE) use active rather than total parameters for the speed term.
+
+**Where it fits.**
+- **Beginners** — `modelfit wizard` asks two questions, returns one model + one install command.
+- **Power users** — `modelfit rank -u code` for full rankings; `modelfit throughput <model>` for engine-by-engine tok/s; `modelfit reverse <model>` for inverse capacity planning ("what hardware do I need for Llama-3.1-70B at 30 tok/s?").
+- **Engineering teams** — `modelfit serve` exposes the same scoring as a stdlib REST API for cluster schedulers and CI agents. Provider-agnostic across Ollama, LM Studio, llama.cpp, vLLM, MLX, and TGI.
+
+**Strategic value.** Deterministic, defensible model-selection decisions for on-premise deployments. Prevents wasted downloads of models that exceed hardware constraints, shortens time-to-production for in-house AI infrastructure, and surfaces the 10× throughput delta between inference engines before a deployment commits to one. Works across heterogeneous fleets (Apple Silicon, NVIDIA, AMD, Intel). A 109-entry plain-English glossary keeps the same outputs readable for non-ML stakeholders.
+
+---
+
 ## First time? Run this:
 
 ```bash
